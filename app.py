@@ -31,13 +31,13 @@ def predict():
         Town=request.form['Town']
         State=request.form['State']
         NewClientName = LabelEncoder().fit_transform(NewClientName)
-        NewProductName = LabelEncoder().fit_transform( NewProductName )
-        Town = LabelEncoder().fit_transform( Town )
-        State = LabelEncoder().fit_transform( State)
+        NewProductName = LabelEncoder().fit_transform(NewProductName)
+        Town = LabelEncoder().fit_transform(Town)
+        State = LabelEncoder().fit_transform(State)
         brand = LabelEncoder().fit_transform(brand)
         prediction=model.predict([[WeekNumber,SalesDepotID,SalesChannelID,RouteID,ClientID,ProductID,NewClientName,pieces,weight,brand,Town,State]])
         print("prediction:",prediction)
-        output=round(prediction.reshape(-1,1))
+        output=round(prediction[0)
         if output<0:
             return render_template('index.html',prediction_texts="There is no demand for this particular product")
         else:
