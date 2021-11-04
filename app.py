@@ -6,9 +6,9 @@ import numpy as np
 import sklearn
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import LabelEncoder
+model = pickle.load(open('list_of_all_models.pkl', 'rb'))
 
 app = Flask(__name__)
-model = pickle.load(open('list_of_all_models.pkl', 'rb'))
 @app.route('/',methods=['GET'])
 def Home():
     return render_template('index.html')
