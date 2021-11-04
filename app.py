@@ -36,6 +36,7 @@ def predict():
         State = LabelEncoder().fit_transform( State)
         brand = LabelEncoder().fit_transform(brand)
         prediction=model.predict([[WeekNumber,SalesDepotID,SalesChannelID,RouteID,ClientID,ProductID,NewClientName,pieces,weight,brand,Town,State]])
+        print("prediction:",prediction)
         output=round(prediction.reshape(-1,1))
         if output<0:
             return render_template('index.html',prediction_texts="There is no demand for this particular product")
