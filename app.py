@@ -6,6 +6,7 @@ import numpy as np
 import sklearn
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import LabelEncoder
+x_train = pickle.load(open('x_train.pkl', 'rb'))
 model = pickle.load(open('list_of_all_models.pkl', 'rb'))
 
 app = Flask(__name__)
@@ -14,7 +15,8 @@ def Home():
     return render_template('index.html')
 
 
-standard_to = StandardScaler()
+le1 = LabelEncoder()
+le = le1.fit(x_train)
 @app.route("/predict", methods=['POST'])
 def predict():
     if request.method == 'POST':
@@ -31,14 +33,13 @@ def predict():
         brand=request.form['brand']
         Town=request.form['Town']
         State=request.form['State']
-        NewClientName = LabelEncoder().fit_transform(NewClientName)
-        NewProductName = LabelEncoder().fit_transform(NewProductName)
-        Town = LabelEncoder().fit_transform(Town)
-        State = LabelEncoder().fit_transform(State)
-        brand = LabelEncoder().fit_transform(brand)
-        prediction=model.predict([[WeekNumber,SalesDepotID,SalesChannelID,RouteID,ClientID,ProductID,NewClientName,NewProductName,pieces,weight,brand,Town,State]])
-        print("prediction:",prediction)
-        output=round(prediction)
+        NewClientName1 = le.transform(NewClientName)
+        NewProductName1 = le.transform(NewProductName)
+        Town1 = le.transform(Town)
+        State1 = le.transform(State)
+        brand1 = le.transform(brand)
+        prediction=model.predict([[WeekNumber,SalesDepotID,SalesChannelID,RouteID,ClientID,ProductID,NewClientName1,NewProductName1,pieces,weight,brand1,Town1,State1]])
+        output=round(prediction[0])
         if output<0:
             return render_template('index.html',prediction_texts="There is no demand for this particular product")
         else:
