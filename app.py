@@ -16,7 +16,11 @@ def Home():
 
 
 le1 = LabelEncoder()
-le = le1.fit(x_train)
+le_c = le1.fit(x_train['NewClientName'])
+le_p = le1.fit(x_train['NewProductName'])
+le_b = le1.fit(x_train['brand'])
+le_t = le1.fit(x_train['Town'])
+le_s = le1.fit(x_train['State'])
 @app.route("/predict", methods=['POST'])
 def predict():
     if request.method == 'POST':
@@ -33,11 +37,11 @@ def predict():
         brand=request.form['brand']
         Town=request.form['Town']
         State=request.form['State']
-        NewClientName1 = le.transform(NewClientName)
-        NewProductName1 = le.transform(NewProductName)
-        Town1 = le.transform(Town)
-        State1 = le.transform(State)
-        brand1 = le.transform(brand)
+        NewClientName1 = le_c.transform(NewClientName)
+        NewProductName1 = le_p.transform(NewProductName)
+        Town1 = le_t.transform(Town)
+        State1 = le_s.transform(State)
+        brand1 = le_b.transform(brand)
         prediction=model.predict([[WeekNumber,SalesDepotID,SalesChannelID,RouteID,ClientID,ProductID,NewClientName1,NewProductName1,pieces,weight,brand1,Town1,State1]])
         output=round(prediction[0])
         if output<0:
