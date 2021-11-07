@@ -4,9 +4,9 @@ import requests
 import pickle
 import numpy as np
 import sklearn
+import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import LabelEncoder
-x_train = pickle.load(open('x_train.pkl', 'rb'))
 model = pickle.load(open('list_of_all_models.pkl', 'rb'))
 
 app = Flask(__name__)
@@ -16,11 +16,6 @@ def Home():
 
 
 le1 = LabelEncoder()
-le_c = le1.fit(x_train['NewClientName'])
-le_p = le1.fit(x_train['NewProductName'])
-le_b = le1.fit(x_train['brand'])
-le_t = le1.fit(x_train['Town'])
-le_s = le1.fit(x_train['State'])
 @app.route("/predict", methods=['POST'])
 def predict():
     if request.method == 'POST':
@@ -37,13 +32,15 @@ def predict():
         brand=request.form['brand']
         Town=request.form['Town']
         State=request.form['State']
-        NewClientName1 = le_c.transform(NewClientName)
-        NewProductName1 = le_p.transform(NewProductName)
-        Town1 = le_t.transform(Town)
-        State1 = le_s.transform(State)
-        brand1 = le_b.transform(brand)
-        prediction=model.predict([[WeekNumber,SalesDepotID,SalesChannelID,RouteID,ClientID,ProductID,NewClientName1,NewProductName1,pieces,weight,brand1,Town1,State1]])
-        output=round(prediction[0])
+        NewClientName1 = le1.fit_transform(['NewClientName'])
+        NewProductName1 = le1.fit_transform(['NewProductName'])
+        brand1 = le1.fit_transform(['brand'])
+        Town1 = le1.fit_transform(['Town'])
+        State1 = le1.fit_transform(['State'])
+        p=np.array([[WeekNumber,SalesDepotID,SalesChannelID,RouteID,ClientID,ProductID,NewClientName1[0],NewProductName1[0],pieces,weight,brand1[0],Town1[0],State1[0]]])
+        d1=pd.DataFrame(p)
+        prediction=model[4].predict(d1)
+        output=round(np.exp(prediction[0]))
         if output<0:
             return render_template('index.html',prediction_texts="There is no demand for this particular product")
         else:
