@@ -6,7 +6,6 @@ import numpy as np
 import sklearn
 import pandas as pd
 import joblib
-train = pd.read_csv('train.csv')
 import Final as final
 
 app = Flask(__name__)
@@ -26,16 +25,16 @@ def predict():
         ProductID=int(request.form['ProductID'])
         NewClientName=request.form['NewClientName']
         NewProductName=request.form['NewProductName']
-        piece=int(request.form['piece'])
+        pieces=int(request.form['pieces'])
         weight=int(request.form['weight'])
         brand=request.form['brand']
         Town=request.form['Town']
         State=request.form['State']
-        p=np.array([[WeekNumber,SalesDepotID,SalesChannelID,RouteID,ClientID,ProductID,NewClientName,NewProductName,piece,weight,brand,Town,State]])
-        d1=pd.DataFrame(p)
-        prediction = final.final_f1(train,d1)
+        p=np.array([[WeekNumber,SalesDepotID,SalesChannelID,RouteID,ClientID,ProductID,NewClientName,NewProductName,pieces,weight,brand,Town,State]])
+        d1=pd.DataFrame(p,columns =['WeekNumber','SalesDepotID','SalesChannelID','RouteID','ClientID','ProductID','NewClientName','NewProductName','pieces','weight','brand','Town','State'])
+        prediction = final.final_f1(d1)
         
-        output=int(np.mean(np.array(prediction)))
+        output=round(prediction[0],2)
         if output<0:
             return render_template('index.html',prediction_texts="There is no demand for this particular product")
         else:
