@@ -6,7 +6,6 @@ import numpy as np
 import sklearn
 import pandas as pd
 import joblib
-model = pickle.load(open('final_model.pkl', 'rb'))
 train = pd.read_csv('train.csv')
 import Final as final
 
