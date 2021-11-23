@@ -61,17 +61,17 @@ def merge_newfeatures_of_unique_categorical_data(temp,train_test):
   MeanPC.rename(columns = {'Demand':'MeanPC'}, inplace = True)
   MeanPCSC.rename(columns = {'Demand':'MeanPCSC'}, inplace = True)
   MeanPCSD.rename(columns = {'Demand':'MeanPCSD'}, inplace = True)
-  final_data=pd.merge(train_test,MeanR,how = 'left', on='RouteID')
-  final_data=pd.merge(final_data,MeanSC,how = 'left', on='SalesChannelID')
-  final_data=pd.merge(final_data,MeanSD,how = 'left', on='SalesDepotID')
-  final_data=pd.merge(final_data,MeanP,how = 'left', on='ProductID')
-  final_data=pd.merge(final_data,MeanC,how = 'left', on='ClientID')
-  final_data=pd.merge(final_data,MeanPSD,how = 'left', on=['ProductID','SalesDepotID'])
-  final_data=pd.merge(final_data,MeanPSC,how = 'left', on=['ProductID','SalesChannelID'])
-  final_data=pd.merge(final_data,MeanPR,how = 'left', on=['ProductID','RouteID'])
-  final_data=pd.merge(final_data,MeanPC,how = 'left', on=['ProductID','ClientID'])
-  final_data=pd.merge(final_data,MeanPCSC,how = 'left', on=['ProductID','ClientID','SalesChannelID'])
-  final_data=pd.merge(final_data,MeanPCSD,how = 'left', on=['ProductID','ClientID','SalesDepotID'])
+  final_data=pd.merge(train_test,MeanR.astype(object),how = 'left', on='RouteID')
+  final_data=pd.merge(final_data,MeanSC.astype(object),how = 'left', on='SalesChannelID')
+  final_data=pd.merge(final_data,MeanSD.astype(object),how = 'left', on='SalesDepotID')
+  final_data=pd.merge(final_data,MeanP.astype(object),how = 'left', on='ProductID')
+  final_data=pd.merge(final_data,MeanC.astype(object),how = 'left', on='ClientID')
+  final_data=pd.merge(final_data,MeanPSD.astype(object),how = 'left', on=['ProductID','SalesDepotID'])
+  final_data=pd.merge(final_data,MeanPSC.astype(object),how = 'left', on=['ProductID','SalesChannelID'])
+  final_data=pd.merge(final_data,MeanPR.astype(object),how = 'left', on=['ProductID','RouteID'])
+  final_data=pd.merge(final_data,MeanPC.astype(object),how = 'left', on=['ProductID','ClientID'])
+  final_data=pd.merge(final_data,MeanPCSC.astype(object),how = 'left', on=['ProductID','ClientID','SalesChannelID'])
+  final_data=pd.merge(final_data,MeanPCSD.astype(object),how = 'left', on=['ProductID','ClientID','SalesDepotID'])
   colname=['ProductID','ClientID','SalesDepotID','SalesChannelID','RouteID']
   final_data.drop(colname, axis=1, inplace=True)# inplace is update test (drop)  
   return final_data
@@ -144,8 +144,8 @@ def preprocess_numerical_data(train_test):
 
 def preprocess_numerical_data_query(query):
   #the below features are right skewed. Hence took log tranformation to make it as a normal distributed var
-  query['pieces'] = query['pieces'].apply(lambda x:np.log(x+1))
-  query['weight'] = query['weight'].apply(lambda x:np.log(x+1))
+  query['pieces']=np.log(int(query['pieces'][0])+1)
+  query['weight']=np.log(int(query['weight'][0])+1)
   return query
 
 import numpy as np
