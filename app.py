@@ -7,6 +7,7 @@ import sklearn
 import pandas as pd
 import joblib
 import Final as final
+import math
 
 app = Flask(__name__)
 @app.route('/',methods=['GET'])
@@ -34,7 +35,7 @@ def predict():
         d1=pd.DataFrame(p,columns =['WeekNumber','SalesDepotID','SalesChannelID','RouteID','ClientID','ProductID','NewClientName','NewProductName','pieces','weight','brand','Town','State'])
         prediction = final.final_f1(d1)
         
-        output=round(prediction[0],2)
+        output=math.floor(prediction[0])
         if output<0:
             return render_template('index.html',prediction_texts="There is no demand for this particular product")
         else:
