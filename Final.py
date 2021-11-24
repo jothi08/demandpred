@@ -2,6 +2,27 @@ import numpy as np
 import pandas as pd
 #import dask.dataframe as dd
 # https://www.kaggle.com/greentearus/bimbo-w-dask-and-call
+final_types1 = {'WeekNumber': np.uint8,
+                'NewClientName': np.int64,
+                'NewProductName': np.float64,
+                'pieces':np.float64,
+                'weight':np.float64,
+                'brand':np.int64,
+                'Town':np.int64,
+                'State':np.int64,
+                'MeanR':np.float64,
+                'MeanSC':np.float64,
+                'MeanSD':np.float64,
+                'MeanP':np.float64,
+                'MeanC':np.float64,
+                'MeanPSD':np.float64,
+                'MeanPSC':np.float64,
+                'MeanPR':np.float64,
+                'MeanPC':np.float64,
+                'MeanPCSC':np.float64,
+                'MeanPCSD':np.float64,
+                }
+
 final_types = {'WeekNumber': np.uint8,
                 'SalesDepotID': np.uint16,
                 'SalesChannelID':np.uint8,
@@ -171,6 +192,8 @@ def final_f1(query_data):
   train = pd.read_csv('train.csv')
   allFeatures=getAllTheFeatures(train,query_data)
   print(allFeatures.shape)
+  print(allFeatures.columns)
+  allFeatures=allFeatures.astype(final_types1)
   final_Model= pickle.load(open('final_model.pkl', 'rb'))
   prediction1= final_Model.predict(allFeatures)
   return prediction1
